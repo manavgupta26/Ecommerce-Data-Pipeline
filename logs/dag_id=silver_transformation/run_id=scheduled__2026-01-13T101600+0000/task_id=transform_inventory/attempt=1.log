@@ -1,0 +1,17 @@
+[2026-01-13T10:17:35.205+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: silver_transformation.transform_inventory scheduled__2026-01-13T10:16:00+00:00 [queued]>
+[2026-01-13T10:17:35.212+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: silver_transformation.transform_inventory scheduled__2026-01-13T10:16:00+00:00 [queued]>
+[2026-01-13T10:17:35.213+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-01-13T10:17:35.227+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): transform_inventory> on 2026-01-13 10:16:00+00:00
+[2026-01-13T10:17:35.232+0000] {standard_task_runner.py:60} INFO - Started process 1113 to run task
+[2026-01-13T10:17:35.236+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'silver_transformation', 'transform_inventory', 'scheduled__2026-01-13T10:16:00+00:00', '--job-id', '474', '--raw', '--subdir', 'DAGS_FOLDER/silver_transformation_dag.py', '--cfg-path', '/tmp/tmpmnfre5xv']
+[2026-01-13T10:17:35.239+0000] {standard_task_runner.py:88} INFO - Job 474: Subtask transform_inventory
+[2026-01-13T10:17:35.320+0000] {task_command.py:423} INFO - Running <TaskInstance: silver_transformation.transform_inventory scheduled__2026-01-13T10:16:00+00:00 [running]> on host 1a9fc2980c7c
+[2026-01-13T10:17:35.408+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='silver_transformation' AIRFLOW_CTX_TASK_ID='transform_inventory' AIRFLOW_CTX_EXECUTION_DATE='2026-01-13T10:16:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-01-13T10:16:00+00:00'
+[2026-01-13T10:17:35.409+0000] {logging_mixin.py:188} INFO - 🔄 Transforming inventory: Bronze → Silver
+[2026-01-13T10:17:35.428+0000] {base.py:83} INFO - Using connection ID '***_db' for task execution.
+[2026-01-13T10:17:35.438+0000] {logging_mixin.py:188} INFO - 📊 Found 20 inventory records in Bronze
+[2026-01-13T10:17:35.447+0000] {logging_mixin.py:188} INFO - ✅ Transformed 20 inventory records into silver_inventory
+[2026-01-13T10:17:35.447+0000] {python.py:201} INFO - Done. Returned value was: 20
+[2026-01-13T10:17:35.469+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=silver_transformation, task_id=transform_inventory, execution_date=20260113T101600, start_date=20260113T101735, end_date=20260113T101735
+[2026-01-13T10:17:35.491+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-01-13T10:17:35.507+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

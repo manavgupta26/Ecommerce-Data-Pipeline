@@ -1,0 +1,14 @@
+# Airflow Providers
+apache-airflow-providers-postgres==5.10.0
+
+# Data Processing
+pandas==2.1.4
+requests==2.31.0
+faker==22.0.0
+
+# Database
+psycopg2-binary==2.9.9
+sqlalchemy==1.4.51
+
+# Utilities
+python-dotenv==1.0.0

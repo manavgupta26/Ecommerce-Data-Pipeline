@@ -1,0 +1,17 @@
+[2026-01-13T10:44:03.667+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bronze_ingestion.generate_orders scheduled__2026-01-13T10:43:00+00:00 [queued]>
+[2026-01-13T10:44:03.681+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bronze_ingestion.generate_orders scheduled__2026-01-13T10:43:00+00:00 [queued]>
+[2026-01-13T10:44:03.682+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-01-13T10:44:03.695+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): generate_orders> on 2026-01-13 10:43:00+00:00
+[2026-01-13T10:44:03.699+0000] {standard_task_runner.py:60} INFO - Started process 2782 to run task
+[2026-01-13T10:44:03.702+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'bronze_ingestion', 'generate_orders', 'scheduled__2026-01-13T10:43:00+00:00', '--job-id', '767', '--raw', '--subdir', 'DAGS_FOLDER/bronze_ingestion_dag.py', '--cfg-path', '/tmp/tmpdr1hwjo5']
+[2026-01-13T10:44:03.704+0000] {standard_task_runner.py:88} INFO - Job 767: Subtask generate_orders
+[2026-01-13T10:44:03.787+0000] {task_command.py:423} INFO - Running <TaskInstance: bronze_ingestion.generate_orders scheduled__2026-01-13T10:43:00+00:00 [running]> on host 1a9fc2980c7c
+[2026-01-13T10:44:03.877+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='bronze_ingestion' AIRFLOW_CTX_TASK_ID='generate_orders' AIRFLOW_CTX_EXECUTION_DATE='2026-01-13T10:43:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-01-13T10:43:00+00:00'
+[2026-01-13T10:44:03.880+0000] {logging_mixin.py:188} INFO - 📦 Generating order data...
+[2026-01-13T10:44:03.960+0000] {logging_mixin.py:188} INFO - ✅ Generated 500 orders
+[2026-01-13T10:44:03.975+0000] {base.py:83} INFO - Using connection ID '***_db' for task execution.
+[2026-01-13T10:44:04.123+0000] {logging_mixin.py:188} INFO - ✅ Inserted 500 orders into bronze_orders
+[2026-01-13T10:44:04.125+0000] {python.py:201} INFO - Done. Returned value was: 500
+[2026-01-13T10:44:04.150+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=bronze_ingestion, task_id=generate_orders, execution_date=20260113T104300, start_date=20260113T104403, end_date=20260113T104404
+[2026-01-13T10:44:04.197+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-01-13T10:44:04.214+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

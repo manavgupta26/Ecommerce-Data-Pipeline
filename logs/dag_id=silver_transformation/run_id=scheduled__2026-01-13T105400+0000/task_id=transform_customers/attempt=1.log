@@ -1,0 +1,18 @@
+[2026-01-13T10:55:34.335+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: silver_transformation.transform_customers scheduled__2026-01-13T10:54:00+00:00 [queued]>
+[2026-01-13T10:55:34.345+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: silver_transformation.transform_customers scheduled__2026-01-13T10:54:00+00:00 [queued]>
+[2026-01-13T10:55:34.346+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-01-13T10:55:34.364+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): transform_customers> on 2026-01-13 10:54:00+00:00
+[2026-01-13T10:55:34.375+0000] {standard_task_runner.py:60} INFO - Started process 3429 to run task
+[2026-01-13T10:55:34.379+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'silver_transformation', 'transform_customers', 'scheduled__2026-01-13T10:54:00+00:00', '--job-id', '846', '--raw', '--subdir', 'DAGS_FOLDER/silver_transformation_dag.py', '--cfg-path', '/tmp/tmp9o264anx']
+[2026-01-13T10:55:34.382+0000] {standard_task_runner.py:88} INFO - Job 846: Subtask transform_customers
+[2026-01-13T10:55:34.484+0000] {task_command.py:423} INFO - Running <TaskInstance: silver_transformation.transform_customers scheduled__2026-01-13T10:54:00+00:00 [running]> on host 1a9fc2980c7c
+[2026-01-13T10:55:34.620+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='silver_transformation' AIRFLOW_CTX_TASK_ID='transform_customers' AIRFLOW_CTX_EXECUTION_DATE='2026-01-13T10:54:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-01-13T10:54:00+00:00'
+[2026-01-13T10:55:34.624+0000] {logging_mixin.py:188} INFO - 🔄 Transforming customers: Bronze → Silver
+[2026-01-13T10:55:34.641+0000] {base.py:83} INFO - Using connection ID '***_db' for task execution.
+[2026-01-13T10:55:34.651+0000] {logging_mixin.py:188} INFO - 👤 Found 200 customers in Bronze
+[2026-01-13T10:55:34.716+0000] {logging_mixin.py:188} INFO - ✅ Transformed 200 customers into silver_customers
+[2026-01-13T10:55:34.717+0000] {logging_mixin.py:188} INFO - ⚠️ Skipped 0 customers due to data quality issues
+[2026-01-13T10:55:34.717+0000] {python.py:201} INFO - Done. Returned value was: 200
+[2026-01-13T10:55:34.742+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=silver_transformation, task_id=transform_customers, execution_date=20260113T105400, start_date=20260113T105534, end_date=20260113T105534
+[2026-01-13T10:55:34.793+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-01-13T10:55:34.813+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check

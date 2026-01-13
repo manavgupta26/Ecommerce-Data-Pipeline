@@ -1,0 +1,17 @@
+[2026-01-13T07:37:58.649+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bronze_ingestion.generate_inventory manual__2026-01-13T07:37:55.880882+00:00 [queued]>
+[2026-01-13T07:37:58.658+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bronze_ingestion.generate_inventory manual__2026-01-13T07:37:55.880882+00:00 [queued]>
+[2026-01-13T07:37:58.659+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-01-13T07:37:58.674+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): generate_inventory> on 2026-01-13 07:37:55.880882+00:00
+[2026-01-13T07:37:58.680+0000] {standard_task_runner.py:60} INFO - Started process 294 to run task
+[2026-01-13T07:37:58.686+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'bronze_ingestion', 'generate_inventory', 'manual__2026-01-13T07:37:55.880882+00:00', '--job-id', '80', '--raw', '--subdir', 'DAGS_FOLDER/bronze_ingestion_dag.py', '--cfg-path', '/tmp/tmpyp5_0628']
+[2026-01-13T07:37:58.690+0000] {standard_task_runner.py:88} INFO - Job 80: Subtask generate_inventory
+[2026-01-13T07:37:58.789+0000] {task_command.py:423} INFO - Running <TaskInstance: bronze_ingestion.generate_inventory manual__2026-01-13T07:37:55.880882+00:00 [running]> on host d368bdbc9866
+[2026-01-13T07:37:59.072+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='bronze_ingestion' AIRFLOW_CTX_TASK_ID='generate_inventory' AIRFLOW_CTX_EXECUTION_DATE='2026-01-13T07:37:55.880882+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-13T07:37:55.880882+00:00'
+[2026-01-13T07:37:59.080+0000] {logging_mixin.py:188} INFO - 📊 Generating inventory data...
+[2026-01-13T07:37:59.110+0000] {logging_mixin.py:188} INFO - ✅ Generated 20 inventory records
+[2026-01-13T07:37:59.138+0000] {base.py:83} INFO - Using connection ID '***_db' for task execution.
+[2026-01-13T07:37:59.194+0000] {logging_mixin.py:188} INFO - ✅ Inserted 20 inventory records into bronze_inventory
+[2026-01-13T07:37:59.195+0000] {python.py:201} INFO - Done. Returned value was: 20
+[2026-01-13T07:37:59.253+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=bronze_ingestion, task_id=generate_inventory, execution_date=20260113T073755, start_date=20260113T073758, end_date=20260113T073759
+[2026-01-13T07:37:59.282+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-01-13T07:37:59.321+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

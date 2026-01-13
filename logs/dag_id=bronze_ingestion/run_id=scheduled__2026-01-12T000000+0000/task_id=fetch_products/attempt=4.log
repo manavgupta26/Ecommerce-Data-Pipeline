@@ -1,0 +1,40 @@
+[2026-01-13T07:00:27.270+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bronze_ingestion.fetch_products scheduled__2026-01-12T00:00:00+00:00 [queued]>
+[2026-01-13T07:00:27.278+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bronze_ingestion.fetch_products scheduled__2026-01-12T00:00:00+00:00 [queued]>
+[2026-01-13T07:00:27.279+0000] {taskinstance.py:2170} INFO - Starting attempt 4 of 6
+[2026-01-13T07:00:27.293+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): fetch_products> on 2026-01-12 00:00:00+00:00
+[2026-01-13T07:00:27.299+0000] {standard_task_runner.py:60} INFO - Started process 369 to run task
+[2026-01-13T07:00:27.302+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'bronze_ingestion', 'fetch_products', 'scheduled__2026-01-12T00:00:00+00:00', '--job-id', '31', '--raw', '--subdir', 'DAGS_FOLDER/bronze_ingestion_dag.py', '--cfg-path', '/tmp/tmpiorsacn3']
+[2026-01-13T07:00:27.305+0000] {standard_task_runner.py:88} INFO - Job 31: Subtask fetch_products
+[2026-01-13T07:00:27.388+0000] {task_command.py:423} INFO - Running <TaskInstance: bronze_ingestion.fetch_products scheduled__2026-01-12T00:00:00+00:00 [running]> on host 06fe2fc76adc
+[2026-01-13T07:00:27.477+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='bronze_ingestion' AIRFLOW_CTX_TASK_ID='fetch_products' AIRFLOW_CTX_EXECUTION_DATE='2026-01-12T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='4' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-01-12T00:00:00+00:00'
+[2026-01-13T07:00:27.479+0000] {logging_mixin.py:188} INFO - 🔍 Fetching products from Fake Store API...
+[2026-01-13T07:00:28.088+0000] {api_client.py:30} INFO - ✅ Fetched 20 products from API
+[2026-01-13T07:00:28.089+0000] {logging_mixin.py:188} INFO - ✅ Fetched 20 products
+[2026-01-13T07:00:28.102+0000] {base.py:83} INFO - Using connection ID 'warehouse_db' for task execution.
+[2026-01-13T07:00:28.108+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/models/taskinstance.py", line 433, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/bronze_ingestion_dag.py", line 49, in fetch_and_load_products
+    conn = postgres_hook.get_conn()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/providers/postgres/hooks/postgres.py", line 158, in get_conn
+    self.conn = psycopg2.connect(**conn_args)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: connection to server at "postgres" (172.19.0.3), port 5432 failed: FATAL:  database "data_warehouse" does not exist
+
+[2026-01-13T07:00:28.124+0000] {taskinstance.py:1138} INFO - Marking task as UP_FOR_RETRY. dag_id=bronze_ingestion, task_id=fetch_products, execution_date=20260112T000000, start_date=20260113T070027, end_date=20260113T070028
+[2026-01-13T07:00:28.138+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 31 for task fetch_products (connection to server at "postgres" (172.19.0.3), port 5432 failed: FATAL:  database "data_warehouse" does not exist
+; 369)
+[2026-01-13T07:00:28.158+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2026-01-13T07:00:28.180+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

@@ -1,0 +1,18 @@
+[2026-01-13T10:29:01.399+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bronze_ingestion.fetch_products scheduled__2026-01-13T10:28:00+00:00 [queued]>
+[2026-01-13T10:29:01.411+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bronze_ingestion.fetch_products scheduled__2026-01-13T10:28:00+00:00 [queued]>
+[2026-01-13T10:29:01.412+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-01-13T10:29:01.433+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): fetch_products> on 2026-01-13 10:28:00+00:00
+[2026-01-13T10:29:01.438+0000] {standard_task_runner.py:60} INFO - Started process 1830 to run task
+[2026-01-13T10:29:01.442+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'bronze_ingestion', 'fetch_products', 'scheduled__2026-01-13T10:28:00+00:00', '--job-id', '599', '--raw', '--subdir', 'DAGS_FOLDER/bronze_ingestion_dag.py', '--cfg-path', '/tmp/tmp16daesq2']
+[2026-01-13T10:29:01.444+0000] {standard_task_runner.py:88} INFO - Job 599: Subtask fetch_products
+[2026-01-13T10:29:01.528+0000] {task_command.py:423} INFO - Running <TaskInstance: bronze_ingestion.fetch_products scheduled__2026-01-13T10:28:00+00:00 [running]> on host 1a9fc2980c7c
+[2026-01-13T10:29:01.610+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='bronze_ingestion' AIRFLOW_CTX_TASK_ID='fetch_products' AIRFLOW_CTX_EXECUTION_DATE='2026-01-13T10:28:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-01-13T10:28:00+00:00'
+[2026-01-13T10:29:01.611+0000] {logging_mixin.py:188} INFO - 🔍 Fetching products from Fake Store API...
+[2026-01-13T10:29:02.218+0000] {api_client.py:30} INFO - ✅ Fetched 20 products from API
+[2026-01-13T10:29:02.219+0000] {logging_mixin.py:188} INFO - ✅ Fetched 20 products
+[2026-01-13T10:29:02.228+0000] {base.py:83} INFO - Using connection ID '***_db' for task execution.
+[2026-01-13T10:29:02.246+0000] {logging_mixin.py:188} INFO - ✅ Inserted 20 products into bronze_products
+[2026-01-13T10:29:02.264+0000] {python.py:201} INFO - Done. Returned value was: 20
+[2026-01-13T10:29:02.286+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=bronze_ingestion, task_id=fetch_products, execution_date=20260113T102800, start_date=20260113T102901, end_date=20260113T102902
+[2026-01-13T10:29:02.339+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-01-13T10:29:02.365+0000] {taskinstance.py:3280} INFO - 2 downstream tasks scheduled from follow-on schedule check
