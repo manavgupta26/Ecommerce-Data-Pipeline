@@ -25,6 +25,25 @@ x-airflow-common:
       condition: service_healthy
 
 services:
+
+  #data visualisation
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    ports:
+      - "3000:3000"
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: postgres
+      MB_DB_PORT: 5432
+      MB_DB_USER: warehouse
+      MB_DB_PASS: warehouse
+      MB_DB_HOST: warehouse-db
+    depends_on:
+      - warehouse-db
+    restart: always
+    volumes:
+      - metabase-data:/metabase-data
   # Airflow Metadata Database
   postgres:
     image: postgres:15
@@ -134,3 +153,4 @@ volumes:
   postgres-db-volume:
   warehouse-db-volume:
   minio-data:
+  metabase-data:

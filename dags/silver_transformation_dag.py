@@ -130,6 +130,13 @@ def transform_products(**context):
     return transformed_count
 
 
+#------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 def transform_customers(**context):
     """Transform customers from Bronze to Silver"""
     print("🔄 Transforming customers: Bronze → Silver")
@@ -237,6 +244,8 @@ def transform_customers(**context):
     print(f"✅ Transformed {transformed_count} customers into silver_customers")
     print(f"⚠️ Skipped {skipped_count} customers due to data quality issues")
     return transformed_count
+
+#----------------------------------------------------------------------------------------------------
 
 
 def transform_orders(**context):
