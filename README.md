@@ -44,10 +44,10 @@ This project demonstrates a **real-world data engineering pipeline** that:
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    DATA SOURCES                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │ Fake Store   │  │    Order     │  │  Inventory   │  │
-│  │     API      │  │  Generator   │  │   Generator  │  │
-│  └──────────────┘  └──────────────┘  └──────────────┘  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ Fake Store   │  │    Order     │  │  Inventory   │   │
+│  │     API      │  │  Generator   │  │   Generator  │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
 └────────────────────────┬────────────────────────────────┘
                          │
                          ↓
@@ -56,7 +56,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
 │  • bronze_products      • bronze_orders                 │
 │  • bronze_customers     • bronze_inventory              │
 │  • bronze_campaigns                                     │
-│  ✓ Full audit trail     ✓ Source metadata              │
+│  ✓ Full audit trail     ✓ Source metadata               │
 └────────────────────────┬────────────────────────────────┘
                          │
                          ↓ Data Quality Checks
@@ -66,8 +66,8 @@ This project demonstrates a **real-world data engineering pipeline** that:
 │  • silver_products      • silver_orders                 │
 │  • silver_customers     • silver_inventory              │
 │  • silver_campaigns                                     │
-│  ✓ Deduplicated        ✓ Type validated                │
-│  ✓ Enriched fields     ✓ Referential integrity         │
+│  ✓ Deduplicated        ✓ Type validated                 │
+│  ✓ Enriched fields     ✓ Referential integrity          │
 └────────────────────────┬────────────────────────────────┘
                          │
                          ↓ Aggregations & Analytics
@@ -79,7 +79,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
 │  • gold_customer_segments (RFM)                         │
 │  • gold_inventory_health                                │
 │  • gold_campaign_roi                                    │
-│  ✓ Business KPIs       ✓ Ready for BI tools            │
+│  ✓ Business KPIs       ✓ Ready for BI tools             │
 └────────────────────────┬────────────────────────────────┘
                          │
                          ↓
@@ -97,22 +97,18 @@ This project demonstrates a **real-world data engineering pipeline** that:
 │              DOCKER COMPOSE STACK                    │
 ├──────────────────────────────────────────────────────┤
 │                                                      │
-│  ┌────────────┐  ┌────────────┐  ┌─────────────┐   │
-│  │  Airflow   │  │  Airflow   │  │  Warehouse  │   │
-│  │ Webserver  │  │ Scheduler  │  │  PostgreSQL │   │
-│  │ :8080      │  │            │  │  :5433      │   │
-│  └────────────┘  └────────────┘  └─────────────┘   │
+│  ┌────────────┐  ┌────────────┐  ┌─────────────┐     │
+│  │  Airflow   │  │  Airflow   │  │  Warehouse  │     │
+│  │ Webserver  │  │ Scheduler  │  │  PostgreSQL │     │
+│  │ :8080      │  │            │  │  :5433      │     │
+│  └────────────┘  └────────────┘  └─────────────┘     │
 │                                                      │
-│  ┌────────────┐  ┌────────────┐  ┌─────────────┐   │
-│  │  Airflow   │  │  Metadata  │  │  Metabase   │   │
-│  │   Worker   │  │ PostgreSQL │  │  :3000      │   │
-│  │            │  │  :5432     │  │             │   │
-│  └────────────┘  └────────────┘  └─────────────┘   │
+│  ┌────────────┐  ┌────────────┐  ┌─────────────┐     │
+│  │  Airflow   │  │  Metadata  │  │  Metabase   │     │
+│  │   Worker   │  │ PostgreSQL │  │  :3000      │     │
+│  │            │  │  :5432     │  │             │     │
+│  └────────────┘  └────────────┘  └─────────────┘     │
 │                                                      │
-│  ┌────────────┐                                      │
-│  │   MinIO    │                                      │
-│  │ :9000/9001 │                                      │
-│  └────────────┘                                      │
 └──────────────────────────────────────────────────────┘
 ```
 
