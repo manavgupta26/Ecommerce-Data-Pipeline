@@ -234,3 +234,12 @@ Or via Airflow UI:
 - Setup account and connect to `warehouse-db:5432/data_warehouse`
 
 ---
+## ⭐ Star History
+
+If you find this project helpful, please consider giving it a star!
+
+[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/ecommerce-data-pipeline&type=Date)](https://star-history.com/#yourusername/ecommerce-data-pipeline&Date)
+
+---
+
+**Built with ❤️ by Manav Gupta**
