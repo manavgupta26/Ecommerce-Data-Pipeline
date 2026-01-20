@@ -12,6 +12,9 @@ from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
 # Add scripts directory to path
 sys.path.insert(0, '/opt/airflow/scripts')
+#this sys.path.insert is used to use other files some func in this file python
+#This line adds a custom directory to Python’s module search path so Airflow DAGs can import shared utility scripts.
+
 
 from api_client import FakeStoreAPIClient
 from data_generators import (
@@ -363,8 +366,8 @@ with DAG(
         dag_id='bronze_ingestion',
         default_args=default_args,
         description='Ingest data from sources into Bronze layer',
-        schedule_interval='*/1 * * * *',  # Run once per day
-        start_date=datetime(2024, 1, 1),
+        schedule_interval='@daily',  # Run once per day
+        start_date=datetime(2026, 1, 1),
         catchup=False,
         tags=['bronze', 'ingestion', 'ecommerce'],
 ) as dag:
@@ -409,49 +412,3 @@ with DAG(
     fetch_products >> generate_inventory
     generate_campaigns  # Independent task
 
-
-# with DAG(
-#     dag_id='bronze_ingestion',
-#     default_args=default_args,
-#     description='Ingest data from sources into Bronze layer',
-#     schedule_interval='@daily',
-#     start_date=datetime(2024, 1, 1),
-#     catchup=False,
-#     tags=['bronze', 'ingestion', 'ecommerce'],
-# ) as dag:
-#
-#     fetch_products = PythonOperator(
-#         task_id='fetch_products',
-#         python_callable=fetch_and_load_products,
-#     )
-#
-#     generate_customers = PythonOperator(
-#         task_id='generate_customers',
-#         python_callable=generate_and_load_customers,
-#     )
-#
-#     generate_orders = PythonOperator(
-#         task_id='generate_orders',
-#         python_callable=generate_and_load_orders,
-#     )
-#
-#     generate_inventory = PythonOperator(
-#         task_id='generate_inventory',
-#         python_callable=generate_and_load_inventory,
-#     )
-#
-#     generate_campaigns = PythonOperator(
-#         task_id='generate_campaigns',
-#         python_callable=generate_and_load_campaigns,
-#     )
-#
-#     trigger_silver = TriggerDagRunOperator(
-#         task_id="trigger_silver_transformation",
-#         trigger_dag_id="silver_transformation",
-#     )
-#
-#     fetch_products >> generate_customers
-#     [fetch_products, generate_customers] >> generate_orders
-#     fetch_products >> generate_inventory
-#
-#     [generate_orders, generate_inventory, generate_campaigns] >> trigger_silver

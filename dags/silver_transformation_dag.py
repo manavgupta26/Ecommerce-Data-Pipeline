@@ -51,6 +51,9 @@ def calculate_stock_status(stock_quantity, reorder_point):
 
 
 def transform_products(**context):
+    #In Airflow, when a task runs, Airflow automatically sends extra information like:
+    #execution date, taskid, dagid etc
+
     """Transform products from Bronze to Silver"""
     print("🔄 Transforming products: Bronze → Silver")
 
@@ -131,10 +134,6 @@ def transform_products(**context):
 
 
 #------------------------------------------------------------------------------------------------
-
-
-
-
 
 
 def transform_customers(**context):
@@ -257,6 +256,7 @@ def transform_orders(**context):
     cursor = conn.cursor()
 
     # Fetch orders from Bronze with validation
+    #keeps orderes whose customer_id is present in the customers table and same for product id
     cursor.execute("""
                    SELECT o.order_id,
                           o.customer_id,
@@ -276,6 +276,7 @@ def transform_orders(**context):
                      AND o.quantity > 0
                      AND o.unit_price > 0
                    """)
+
 
     bronze_orders = cursor.fetchall()
     print(f"📦 Found {len(bronze_orders)} valid orders in Bronze")
@@ -337,6 +338,8 @@ def transform_orders(**context):
 
     print(f"✅ Transformed {transformed_count} orders into silver_orders")
     return transformed_count
+
+#----------------------------------------------------------------------------------------------------
 
 
 def transform_inventory(**context):
@@ -402,6 +405,8 @@ def transform_inventory(**context):
 
     print(f"✅ Transformed {transformed_count} inventory records into silver_inventory")
     return transformed_count
+
+#----------------------------------------------------------------------------------------------------
 
 
 def transform_campaigns(**context):
@@ -476,53 +481,14 @@ def transform_campaigns(**context):
     return transformed_count
 
 
-# Define the DAG
-# with DAG(
-#     dag_id='silver_transformation',
-#     default_args=default_args,
-#     description='Transform and clean data from Bronze to Silver layer',
-#     schedule_interval=None,   # 🔑 IMPORTANT
-#     start_date=datetime(2024, 1, 1),
-#     catchup=False,
-#     tags=['silver', 'transformation', 'ecommerce'],
-# ) as dag:
-#
-#     transform_products_task = PythonOperator(
-#         task_id='transform_products',
-#         python_callable=transform_products,
-#     )
-#
-#     transform_customers_task = PythonOperator(
-#         task_id='transform_customers',
-#         python_callable=transform_customers,
-#     )
-#
-#     transform_orders_task = PythonOperator(
-#         task_id='transform_orders',
-#         python_callable=transform_orders,
-#     )
-#
-#     transform_inventory_task = PythonOperator(
-#         task_id='transform_inventory',
-#         python_callable=transform_inventory,
-#     )
-#
-#     transform_campaigns_task = PythonOperator(
-#         task_id='transform_campaigns',
-#         python_callable=transform_campaigns,
-#     )
-#
-#     [transform_products_task, transform_customers_task] >> transform_orders_task
-#     transform_products_task >> transform_inventory_task
-
 
 # Define the DAG
 with DAG(
         dag_id='silver_transformation',
         default_args=default_args,
         description='Transform and clean data from Bronze to Silver layer',
-        schedule_interval='*/1 * * * *',
-        start_date=datetime(2024, 1, 1),
+        schedule_interval='@daily',
+        start_date=datetime(2026, 1, 1),
         catchup=False,
         tags=['silver', 'transformation', 'ecommerce'],
 ) as dag:
