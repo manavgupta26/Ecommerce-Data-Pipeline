@@ -159,3 +159,78 @@ This project demonstrates a **real-world data engineering pipeline** that:
 - ✅ **Metabase Integration** - Self-service BI dashboards
 
 ---
+
+## 🚀 Setup Instructions
+
+### Prerequisites
+- Docker Desktop (4.0+)
+- Docker Compose (3.8+)
+- 8GB RAM minimum
+- 10GB free disk space
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/ecommerce-data-pipeline.git
+cd ecommerce-data-pipeline
+```
+
+2. **Create required directories**
+```bash
+mkdir -p dags logs plugins data/incoming data/archive sql scripts tests
+```
+
+3. **Build and start services**
+```bash
+docker-compose build
+docker-compose up -d
+```
+
+4. **Wait for services to initialize** (2-3 minutes)
+```bash
+# Check service health
+docker-compose ps
+```
+
+5. **Access Airflow UI**
+- URL: http://localhost:8080
+- Username: `airflow`
+- Password: `airflow`
+
+6. **Configure Airflow connection**
+```bash
+# Add warehouse database connection
+docker exec -it  airflow connections add 'warehouse_db' \
+    --conn-type 'postgres' \
+    --conn-host 'warehouse-db' \
+    --conn-schema 'data_warehouse' \
+    --conn-login 'warehouse' \
+    --conn-password 'warehouse' \
+    --conn-port 5432
+```
+
+Or via Airflow UI:
+- Go to Admin → Connections → Add
+- Connection Id: `warehouse_db`
+- Connection Type: `Postgres`
+- Host: `warehouse-db`
+- Schema: `data_warehouse`
+- Login: `warehouse`
+- Password: `warehouse`
+- Port: `5432`
+
+7. **Trigger the pipeline**
+```bash
+# In Airflow UI, unpause and trigger:
+# 1. bronze_ingestion
+# 2. silver_transformation (auto-triggers)
+# 3. gold_analytics (auto-triggers)
+# 4. scd_maintenance
+```
+
+8. **Access Metabase** (optional)
+- URL: http://localhost:3000
+- Setup account and connect to `warehouse-db:5432/data_warehouse`
+
+---
