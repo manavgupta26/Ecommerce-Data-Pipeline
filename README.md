@@ -30,7 +30,7 @@ A production-grade, end-to-end data engineering project built with **Apache Airf
 This project demonstrates a **real-world data engineering pipeline** that:
 - Ingests data from REST APIs and generates realistic e-commerce transactions
 - Implements data quality checks and transformations
-- Creates business-ready analytics with **RFM segmentation**, **inventory health monitoring**, and **campaign ROI analysis**
+- Creates business-ready analytics with **RFM segmentation**(recency, frequency, monetary), **inventory health monitoring**, and **campaign ROI analysis**
 - Tracks historical changes using **SCD Type 2** (Slowly Changing Dimensions)
 - Provides self-service BI dashboards with **Metabase**
 
