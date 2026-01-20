@@ -41,7 +41,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
 ## 🏗️ Architecture
 
 ### Medallion Architecture
-
+```
 ┌─────────────────────────────────────────────────────────┐
 │                    DATA SOURCES                         │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
@@ -49,8 +49,8 @@ This project demonstrates a **real-world data engineering pipeline** that:
 │  │     API      │  │  Generator   │  │   Generator  │  │
 │  └──────────────┘  └──────────────┘  └──────────────┘  │
 └────────────────────────┬────────────────────────────────┘
-│
-↓
+                         │
+                         ↓
 ┌─────────────────────────────────────────────────────────┐
 │              🥉 BRONZE LAYER (Raw Data)                 │
 │  • bronze_products      • bronze_orders                 │
@@ -58,9 +58,9 @@ This project demonstrates a **real-world data engineering pipeline** that:
 │  • bronze_campaigns                                     │
 │  ✓ Full audit trail     ✓ Source metadata              │
 └────────────────────────┬────────────────────────────────┘
-│
-↓ Data Quality Checks
-│
+                         │
+                         ↓ Data Quality Checks
+                         │
 ┌─────────────────────────────────────────────────────────┐
 │           🥈 SILVER LAYER (Cleaned & Validated)         │
 │  • silver_products      • silver_orders                 │
@@ -69,9 +69,9 @@ This project demonstrates a **real-world data engineering pipeline** that:
 │  ✓ Deduplicated        ✓ Type validated                │
 │  ✓ Enriched fields     ✓ Referential integrity         │
 └────────────────────────┬────────────────────────────────┘
-│
-↓ Aggregations & Analytics
-│
+                         │
+                         ↓ Aggregations & Analytics
+                         │
 ┌─────────────────────────────────────────────────────────┐
 │         🥇 GOLD LAYER (Business Analytics)              │
 │  • gold_daily_revenue                                   │
@@ -81,11 +81,85 @@ This project demonstrates a **real-world data engineering pipeline** that:
 │  • gold_campaign_roi                                    │
 │  ✓ Business KPIs       ✓ Ready for BI tools            │
 └────────────────────────┬────────────────────────────────┘
-│
-↓
+                         │
+                         ↓
 ┌─────────────────────────────────────────────────────────┐
 │              📊 VISUALIZATION LAYER                     │
 │                    (Metabase)                           │
 │  • Revenue Dashboards   • Customer Insights             │
 │  • Product Analytics    • Inventory Alerts              │
 └─────────────────────────────────────────────────────────┘
+```
+
+### Infrastructure Architecture
+```
+┌──────────────────────────────────────────────────────┐
+│              DOCKER COMPOSE STACK                    │
+├──────────────────────────────────────────────────────┤
+│                                                      │
+│  ┌────────────┐  ┌────────────┐  ┌─────────────┐   │
+│  │  Airflow   │  │  Airflow   │  │  Warehouse  │   │
+│  │ Webserver  │  │ Scheduler  │  │  PostgreSQL │   │
+│  │ :8080      │  │            │  │  :5433      │   │
+│  └────────────┘  └────────────┘  └─────────────┘   │
+│                                                      │
+│  ┌────────────┐  ┌────────────┐  ┌─────────────┐   │
+│  │  Airflow   │  │  Metadata  │  │  Metabase   │   │
+│  │   Worker   │  │ PostgreSQL │  │  :3000      │   │
+│  │            │  │  :5432     │  │             │   │
+│  └────────────┘  └────────────┘  └─────────────┘   │
+│                                                      │
+│  ┌────────────┐                                      │
+│  │   MinIO    │                                      │
+│  │ :9000/9001 │                                      │
+│  └────────────┘                                      │
+└──────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Component | Technology | Version |
+|-----------|-----------|---------|
+| **Orchestration** | Apache Airflow | 2.8.1 |
+| **Data Warehouse** | PostgreSQL | 15 |
+| **Containerization** | Docker Compose | 3.8 |
+| **Language** | Python | 3.11 |
+| **Visualization** | Metabase | Latest |
+| **Object Storage** | MinIO | Latest |
+| **API Source** | Fake Store API | - |
+
+### Python Libraries
+- `apache-airflow-providers-postgres` - Database connectivity
+- `pandas` - Data manipulation
+- `faker` - Synthetic data generation
+- `requests` - API calls
+- `psycopg2-binary` - PostgreSQL adapter
+
+---
+
+## ✨ Features
+
+### 🔄 Data Pipeline
+- ✅ **Automated daily ingestion** from REST APIs
+- ✅ **Incremental loading** with upsert logic
+- ✅ **Data quality validation** (email format, price ranges, referential integrity)
+- ✅ **Error handling** with retries and alerting
+- ✅ **Full audit trail** (source, timestamp, pipeline_run_id)
+
+### 📊 Analytics
+- ✅ **RFM Customer Segmentation** (Recency, Frequency, Monetary)
+- ✅ **Product Performance Metrics** (revenue, profit margin, rankings)
+- ✅ **Inventory Health Monitoring** (low stock, overstock, dead stock alerts)
+- ✅ **Campaign ROI Analysis** (ROAS, cost per order, conversion rates)
+- ✅ **Daily Revenue Trends** (YoY growth, weekend patterns)
+
+### 🗂️ Advanced Features
+- ✅ **SCD Type 2** - Historical tracking of price changes and customer tier progression
+- ✅ **XCom** - Inter-task communication for data sharing
+- ✅ **External Task Sensors** - DAG dependency management
+- ✅ **Dynamic Task Generation** - Scalable pipeline design
+- ✅ **Metabase Integration** - Self-service BI dashboards
+
+---
