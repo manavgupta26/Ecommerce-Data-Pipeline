@@ -239,4 +239,4 @@ Or via Airflow UI:
 If you find this project helpful, please consider giving it a star!
 ---
 
-**Built with ❤️ by Manav Gupta**
+**Built by Manav Gupta**
