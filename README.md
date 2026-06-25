@@ -1,4 +1,4 @@
-# 🛒 E-Commerce Data Pipeline
+# E-Commerce Data Pipeline
 
 A production-grade, end-to-end data engineering project built with **Apache Airflow**, **PostgreSQL**, and **Docker**. This pipeline implements a **medallion architecture** (Bronze → Silver → Gold) to process e-commerce data & generate business intelligence insights.
 
@@ -6,7 +6,7 @@ A production-grade, end-to-end data engineering project built with **Apache Airf
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Architecture](#architecture)
@@ -25,7 +25,7 @@ A production-grade, end-to-end data engineering project built with **Apache Airf
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This project demonstrates a **real-world data engineering pipeline** that:
 - Ingests data from REST APIs and generates realistic e-commerce transactions
@@ -38,7 +38,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ### Medallion Architecture
 ```
@@ -52,7 +52,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
                          │
                          ↓
 ┌─────────────────────────────────────────────────────────┐
-│              🥉 BRONZE LAYER (Raw Data)                 │
+│                 BRONZE LAYER (Raw Data)                 │
 │  • bronze_products      • bronze_orders                 │
 │  • bronze_customers     • bronze_inventory              │
 │  • bronze_campaigns                                     │
@@ -62,7 +62,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
                          ↓ Data Quality Checks
                          │
 ┌─────────────────────────────────────────────────────────┐
-│           🥈 SILVER LAYER (Cleaned & Validated)         │
+│              SILVER LAYER (Cleaned & Validated)         │
 │  • silver_products      • silver_orders                 │
 │  • silver_customers     • silver_inventory              │
 │  • silver_campaigns                                     │
@@ -73,7 +73,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
                          ↓ Aggregations & Analytics
                          │
 ┌─────────────────────────────────────────────────────────┐
-│         🥇 GOLD LAYER (Business Analytics)              │
+│            GOLD LAYER (Business Analytics)              │
 │  • gold_daily_revenue                                   │
 │  • gold_product_performance                             │
 │  • gold_customer_segments (RFM)                         │
@@ -84,7 +84,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
                          │
                          ↓
 ┌─────────────────────────────────────────────────────────┐
-│              📊 VISUALIZATION LAYER                     │
+│                 VISUALIZATION LAYER                     │
 │                    (Metabase)                           │
 │  • Revenue Dashboards   • Customer Insights             │
 │  • Product Analytics    • Inventory Alerts              │
@@ -114,7 +114,7 @@ This project demonstrates a **real-world data engineering pipeline** that:
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Component | Technology | Version |
 |-----------|-----------|---------|
@@ -135,32 +135,32 @@ This project demonstrates a **real-world data engineering pipeline** that:
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🔄 Data Pipeline
-- ✅ **Automated daily ingestion** from REST APIs
-- ✅ **Incremental loading** with upsert logic
-- ✅ **Data quality validation** (email format, price ranges, referential integrity)
-- ✅ **Error handling** with retries and alerting
-- ✅ **Full audit trail** (source, timestamp, pipeline_run_id)
+###  Data Pipeline
+-  **Automated daily ingestion** from REST APIs
+-  **Incremental loading** with upsert logic
+-  **Data quality validation** (email format, price ranges, referential integrity)
+-  **Error handling** with retries and alerting
+-  **Full audit trail** (source, timestamp, pipeline_run_id)
 
-### 📊 Analytics
-- ✅ **RFM Customer Segmentation** (Recency, Frequency, Monetary)
-- ✅ **Product Performance Metrics** (revenue, profit margin, rankings)
-- ✅ **Inventory Health Monitoring** (low stock, overstock, dead stock alerts)
-- ✅ **Campaign ROI Analysis** (ROAS, cost per order, conversion rates)
-- ✅ **Daily Revenue Trends** (YoY growth, weekend patterns)
+###  Analytics
+-  **RFM Customer Segmentation** (Recency, Frequency, Monetary)
+-  **Product Performance Metrics** (revenue, profit margin, rankings)
+-  **Inventory Health Monitoring** (low stock, overstock, dead stock alerts)
+-  **Campaign ROI Analysis** (ROAS, cost per order, conversion rates)
+-  **Daily Revenue Trends** (YoY growth, weekend patterns)
 
-### 🗂️ Advanced Features
-- ✅ **SCD Type 2** - Historical tracking of price changes and customer tier progression
-- ✅ **XCom** - Inter-task communication for data sharing
-- ✅ **External Task Sensors** - DAG dependency management
-- ✅ **Dynamic Task Generation** - Scalable pipeline design
-- ✅ **Metabase Integration** - Self-service BI dashboards
+###  Advanced Features
+-  **SCD Type 2** - Historical tracking of price changes and customer tier progression
+-  **XCom** - Inter-task communication for data sharing
+-  **External Task Sensors** - DAG dependency management
+-  **Dynamic Task Generation** - Scalable pipeline design
+-  **Metabase Integration** - Self-service BI dashboards
 
 ---
 
-## 🚀 Setup Instructions
+##  Setup Instructions
 
 ### Prerequisites
 - Docker Desktop (4.0+)
@@ -234,7 +234,7 @@ Or via Airflow UI:
 - Setup account and connect to `warehouse-db:5432/data_warehouse`
 
 ---
-## ⭐ Star History
+##  Star History
 
 If you find this project helpful, please consider giving it a star!
 ---
