@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import re
 from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.utils.state import DagRunState
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
 # Default arguments
 default_args = {
@@ -55,7 +56,7 @@ def transform_products(**context):
     #execution date, taskid, dagid etc
 
     """Transform products from Bronze to Silver"""
-    print("🔄 Transforming products: Bronze → Silver")
+    print(" Transforming products: Bronze → Silver")
 
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
     conn = postgres_hook.get_conn()
@@ -73,7 +74,7 @@ def transform_products(**context):
                    """)
 
     bronze_products = cursor.fetchall()
-    print(f"📦 Found {len(bronze_products)} products in Bronze")
+    print(f" Found {len(bronze_products)} products in Bronze")
 
     # Transform and insert into Silver
     insert_query = """
@@ -123,13 +124,13 @@ def transform_products(**context):
             ))
             transformed_count += 1
         except Exception as e:
-            print(f"⚠️ Error transforming product {product_id}: {e}")
+            print(f" Error transforming product {product_id}: {e}")
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    print(f"✅ Transformed {transformed_count} products into silver_products")
+    print(f" Transformed {transformed_count} products into silver_products")
     return transformed_count
 
 
@@ -138,7 +139,7 @@ def transform_products(**context):
 
 def transform_customers(**context):
     """Transform customers from Bronze to Silver"""
-    print("🔄 Transforming customers: Bronze → Silver")
+    print(" Transforming customers: Bronze → Silver")
 
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
     conn = postgres_hook.get_conn()
@@ -162,7 +163,7 @@ def transform_customers(**context):
                    """)
 
     bronze_customers = cursor.fetchall()
-    print(f"👤 Found {len(bronze_customers)} customers in Bronze")
+    print(f" Found {len(bronze_customers)} customers in Bronze")
 
     # Transform and insert into Silver
     insert_query = """
@@ -233,15 +234,15 @@ def transform_customers(**context):
             ))
             transformed_count += 1
         except Exception as e:
-            print(f"⚠️ Error transforming customer {customer_id}: {e}")
+            print(f" Error transforming customer {customer_id}: {e}")
             skipped_count += 1
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    print(f"✅ Transformed {transformed_count} customers into silver_customers")
-    print(f"⚠️ Skipped {skipped_count} customers due to data quality issues")
+    print(f" Transformed {transformed_count} customers into silver_customers")
+    print(f" Skipped {skipped_count} customers due to data quality issues")
     return transformed_count
 
 #----------------------------------------------------------------------------------------------------
@@ -249,7 +250,7 @@ def transform_customers(**context):
 
 def transform_orders(**context):
     """Transform orders from Bronze to Silver"""
-    print("🔄 Transforming orders: Bronze → Silver")
+    print(" Transforming orders: Bronze → Silver")
 
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
     conn = postgres_hook.get_conn()
@@ -279,7 +280,7 @@ def transform_orders(**context):
 
 
     bronze_orders = cursor.fetchall()
-    print(f"📦 Found {len(bronze_orders)} valid orders in Bronze")
+    print(f" Found {len(bronze_orders)} valid orders in Bronze")
 
     # Transform and insert into Silver
     insert_query = """
@@ -362,7 +363,7 @@ def transform_inventory(**context):
                    """)
 
     bronze_inventory = cursor.fetchall()
-    print(f"📊 Found {len(bronze_inventory)} inventory records in Bronze")
+    print(f" Found {len(bronze_inventory)} inventory records in Bronze")
 
     # Transform and insert into Silver
     insert_query = """
@@ -411,7 +412,7 @@ def transform_inventory(**context):
 
 def transform_campaigns(**context):
     """Transform campaigns from Bronze to Silver"""
-    print("🔄 Transforming campaigns: Bronze → Silver")
+    print(" Transforming campaigns: Bronze → Silver")
 
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
     conn = postgres_hook.get_conn()
@@ -432,7 +433,7 @@ def transform_campaigns(**context):
                    """)
 
     bronze_campaigns = cursor.fetchall()
-    print(f"📢 Found {len(bronze_campaigns)} campaigns in Bronze")
+    print(f" Found {len(bronze_campaigns)} campaigns in Bronze")
 
     # Transform and insert into Silver
     insert_query = """
@@ -487,7 +488,7 @@ with DAG(
         dag_id='silver_transformation',
         default_args=default_args,
         description='Transform and clean data from Bronze to Silver layer',
-        schedule_interval='@daily',
+        schedule_interval=None,
         start_date=datetime(2026, 1, 1),
         catchup=False,
         tags=['silver', 'transformation', 'ecommerce'],
@@ -533,8 +534,13 @@ with DAG(
         provide_context=True
     )
 
+    trigger_gold = TriggerDagRunOperator(
+        task_id="trigger_gold",
+        trigger_dag_id="gold_analytics",
+    )
+
     # Define dependencies
-    wait_for_bronze >> [
+    [
         transform_products_task,
         transform_customers_task,
         transform_campaigns_task
@@ -542,3 +548,9 @@ with DAG(
 
     [transform_products_task, transform_customers_task] >> transform_orders_task
     transform_products_task >> transform_inventory_task
+
+    [
+        transform_orders_task,
+        transform_inventory_task,
+        transform_campaigns_task
+    ] >> trigger_gold

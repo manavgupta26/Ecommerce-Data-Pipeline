@@ -37,16 +37,16 @@ default_args = {
 
 def fetch_and_load_products(**context):
     """Fetch products from Fake Store API and load to Bronze"""
-    print("🔍 Fetching products from Fake Store API...")
+    print(" Fetching products from Fake Store API...")
 
     # Fetch products
     client = FakeStoreAPIClient()
     products = client.get_all_products()
 
     if not products:
-        raise Exception("❌ Failed to fetch products from API")
+        raise Exception(" Failed to fetch products from API")
 
-    print(f"✅ Fetched {len(products)} products")
+    print(f" Fetched {len(products)} products")
 
     # Get database connection
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
@@ -90,7 +90,7 @@ def fetch_and_load_products(**context):
     cursor.close()
     conn.close()
 
-    print(f"✅ Inserted {inserted_count} products into bronze_products")
+    print(f" Inserted {inserted_count} products into bronze_products")
 
     # Push products to XCom for downstream tasks
     context['task_instance'].xcom_push(key='products', value=products)
@@ -100,13 +100,13 @@ def fetch_and_load_products(**context):
 
 def generate_and_load_customers(**context):
     """Generate customer data and load to Bronze"""
-    print("👤 Generating customer data...")
+    print(" Generating customer data...")
 
     # Generate customers
     customer_gen = CustomerGenerator()
     customers = customer_gen.generate_customers(num_customers=200)
 
-    print(f"✅ Generated {len(customers)} customers")
+    print(f"Generated {len(customers)} customers")
 
     # Get database connection
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
@@ -160,7 +160,7 @@ def generate_and_load_customers(**context):
     cursor.close()
     conn.close()
 
-    print(f"✅ Inserted {inserted_count} customers into bronze_customers")
+    print(f" Inserted {inserted_count} customers into bronze_customers")
 
     # Push customer IDs to XCom for orders task
     customer_ids = [c['customer_id'] for c in customers]
@@ -179,15 +179,15 @@ def generate_and_load_orders(**context):
     customer_ids = task_instance.xcom_pull(task_ids='generate_customers', key='customer_ids')
 
     if not products:
-        raise Exception("❌ No products found in XCom")
+        raise Exception(" No products found in XCom")
     if not customer_ids:
-        raise Exception("❌ No customer IDs found in XCom")
+        raise Exception(" No customer IDs found in XCom")
 
     # Generate orders
     order_gen = OrderGenerator(products, customer_ids=customer_ids)
     orders = order_gen.generate_orders(num_orders=500, days_back=30)
 
-    print(f"✅ Generated {len(orders)} orders")
+    print(f" Generated {len(orders)} orders")
 
     # Get database connection
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
@@ -230,33 +230,33 @@ def generate_and_load_orders(**context):
             ))
             inserted_count += 1
         except Exception as e:
-            print(f"⚠️ Error inserting order {order['order_id']}: {e}")
+            print(f" Error inserting order {order['order_id']}: {e}")
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    print(f"✅ Inserted {inserted_count} orders into bronze_orders")
+    print(f" Inserted {inserted_count} orders into bronze_orders")
 
     return inserted_count
 
 
 def generate_and_load_inventory(**context):
     """Generate inventory data and load to Bronze"""
-    print("📊 Generating inventory data...")
+    print("Generating inventory data...")
 
     # Pull products from XCom
     task_instance = context['task_instance']
     products = task_instance.xcom_pull(task_ids='fetch_products', key='products')
 
     if not products:
-        raise Exception("❌ No products found in XCom")
+        raise Exception(" No products found in XCom")
 
     # Generate inventory
     inventory_gen = InventoryGenerator(products)
     inventory_records = inventory_gen.generate_inventory()
 
-    print(f"✅ Generated {len(inventory_records)} inventory records")
+    print(f" Generated {len(inventory_records)} inventory records")
 
     # Get database connection
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
@@ -298,20 +298,20 @@ def generate_and_load_inventory(**context):
     cursor.close()
     conn.close()
 
-    print(f"✅ Inserted {inserted_count} inventory records into bronze_inventory")
+    print(f" Inserted {inserted_count} inventory records into bronze_inventory")
 
     return inserted_count
 
 
 def generate_and_load_campaigns(**context):
     """Generate campaign data and load to Bronze"""
-    print("📢 Generating campaign data...")
+    print(" Generating campaign data...")
 
     # Generate campaigns
     campaign_gen = CampaignGenerator()
     campaigns = campaign_gen.generate_campaigns(num_campaigns=5)
 
-    print(f"✅ Generated {len(campaigns)} campaigns")
+    print(f" Generated {len(campaigns)} campaigns")
 
     # Get database connection
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
@@ -350,13 +350,13 @@ def generate_and_load_campaigns(**context):
             ))
             inserted_count += 1
         except Exception as e:
-            print(f"⚠️ Error inserting campaign {campaign['campaign_id']}: {e}")
+            print(f" Error inserting campaign {campaign['campaign_id']}: {e}")
 
     conn.commit()
     cursor.close()
     conn.close()
 
-    print(f"✅ Inserted {inserted_count} campaigns into bronze_campaigns")
+    print(f" Inserted {inserted_count} campaigns into bronze_campaigns")
 
     return inserted_count
 
@@ -406,9 +406,18 @@ with DAG(
         provide_context=True
     )
 
+    trigger_silver = TriggerDagRunOperator(
+        task_id="trigger_silver",
+        trigger_dag_id="silver_transformation",
+    )
+
     # Define task dependencies
     fetch_products >> generate_customers
     [fetch_products, generate_customers] >> generate_orders
     fetch_products >> generate_inventory
-    generate_campaigns  # Independent task
+    [
+        generate_orders,
+        generate_inventory,
+        generate_campaigns
+    ] >> trigger_silver
 

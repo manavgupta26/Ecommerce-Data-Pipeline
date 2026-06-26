@@ -21,7 +21,7 @@ default_args = {
 
 def create_daily_revenue(**context):
     """Create daily revenue analytics"""
-    print("📊 Creating daily revenue analytics...")
+    print("Creating daily revenue analytics...")
 
     postgres_hook = PostgresHook(postgres_conn_id='warehouse_db')
     conn = postgres_hook.get_conn()
@@ -63,7 +63,7 @@ def create_daily_revenue(**context):
     rows_inserted = cursor.rowcount
     conn.commit()
 
-    print(f"✅ Created {rows_inserted} daily revenue records")
+    print(f" Created {rows_inserted} daily revenue records")
 
     # Calculate revenue growth
     cursor.execute("""
@@ -80,7 +80,7 @@ def create_daily_revenue(**context):
     cursor.close()
     conn.close()
 
-    print(f"✅ Updated revenue growth metrics")
+    print(f" Updated revenue growth metrics")
     return rows_inserted
 
 
@@ -122,7 +122,7 @@ def create_product_performance(**context):
     rows_inserted = cursor.rowcount
     conn.commit()
 
-    print(f"✅ Created {rows_inserted} product performance records")
+    print(f" Created {rows_inserted} product performance records")
 
     # Calculate overall rankings
     cursor.execute("""
@@ -400,20 +400,12 @@ with DAG(
         dag_id='gold_analytics',
         default_args=default_args,
         description='Create analytics tables in Gold layer',
-        schedule_interval='*/1 * * * *',
-        start_date=datetime(2024, 1, 1),
+        schedule_interval=None,
+        start_date=datetime(2026, 1, 1),
         catchup=False,
         tags=['gold', 'analytics', 'ecommerce'],
 ) as dag:
-    # Wait for Silver transformation to complete
-    wait_for_silver = ExternalTaskSensor(
-        task_id='wait_for_silver_transformation',
-        external_dag_id='silver_transformation',
-        external_task_id=None,  # Wait for entire DAG
-        mode='poke',
-        timeout=600,
-        poke_interval=30
-    )
+
 
     # Analytics tasks
     daily_revenue_task = PythonOperator(
@@ -447,10 +439,3 @@ with DAG(
     )
 
     # Define dependencies - all analytics tasks run in parallel after Silver completes
-    wait_for_silver >> [
-        daily_revenue_task,
-        product_performance_task,
-        customer_segments_task,
-        inventory_health_task,
-        campaign_roi_task
-    ]
